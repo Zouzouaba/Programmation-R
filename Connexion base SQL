@@ -1,0 +1,33 @@
+install.packages(c("httr","jsonlite"))
+library(httr)
+library(jsonlite)
+
+velov <- fromJSON(rawToChar(raw_data$content), flatten = TRUE)
+
+raw_data <- GET("https://api.jcdecaux.com/vls/v1/stations?contract=Lyon&apiKey=14f40934761da90ce82ff1d7ceae62202dba4788")
+
+Velov <- fromJSON(rawToChar(raw_data$content), flatten = TRUE)
+
+# Installation des packages
+install.packages("RMySQL")
+
+#Chargement des packages
+library(RMySQL)
+
+#Connexion à ma base 
+con<- dbConnect(MySQL(),
+                user='sql11646679',
+                password='y4hsWDVThG',
+                host='sql11.freesqldatabase.com',
+                dbname='sql11646679')
+
+#création de la table
+dbWriteTable(con,"velov",Velov)
+
+#Lire la table
+dbReadTable(con,"velov")
+
+
+#installation des packages pour tables communes/code postaux
+install.packages('tidygeocoder')
+
